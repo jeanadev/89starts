@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="[% rfc_1766_lang %]" lang="[% rfc_1766_lang %]">
+    <head>
+        <title>
+            89starts.com -- A guide to getting started in open source
+        </title>
+        <link rel="stylesheet" type="text/css" href="[% base %]/89starts.css" />
+    </head>
+    <body>
+        <div id="wrap">
+            [% PROCESS header.tt %]
+            <div id="container2">
+                <div id="content">
+                    [% body %]
+                </div>
+                <div style="clear:both;"></div>
+                [% PROCESS footer.tt %]
+            </div>
+        </div>
+        [% PROCESS 'google-analytics.html' %]
+    </body>
+</html>

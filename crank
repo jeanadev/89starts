@@ -13,10 +13,12 @@ use Template::Constants qw( :debug :chomp );
 
 my $sourcepath = 's';
 my $buildpath  = 'build';
+my $local;
 
 GetOptions(
     'sourcepath:s' => \$sourcepath,
     'buildpath:s'  => \$buildpath,
+    local          => \$local,
 ) or exit;
 
 -d $buildpath && -w $buildpath or die;
@@ -40,20 +42,25 @@ MAIN: {
 
     my $tt = Template->new( \%tt_defaults );
 
-    my $vars = {
-    };
+    my %default_vars = (
+        rfc_1766_lang => 'en',
+    );
 
     my @pages = @{$pages};
     while ( @pages ) {
-        my ($section,$desc) = splice( @pages, 0, 2 );
+        my ($name,$desc) = splice( @pages, 0, 2 );
 
-        my $source = read_file( "$sourcepath/$section.md" );
+        my $source = read_file( "$sourcepath/$name.md" );
+        my $outfile = "$name.html";
 
-        my $html = $m->markdown( $source );
-        $vars->{body} = $html;
-        $vars->{section} = ($section eq 'index') ? '.' : "$section.html";
-        $vars->{currlang} = ( $desc eq $home ) ? '' : $desc;
-        $tt->process( 'page.tt', $vars, "$section.html", { binmode => ':encoding(UTF-8)' } )
-            || die sprintf("file: %s\nerror: %s\n", "$section.html", $tt->error);
+        # Convert Markdown to HTML and then process it in the template.
+        my $vars = {
+            %default_vars,
+            body  => $m->markdown( $source ),
+            title => $name,
+            base  => $local ? $buildpath : 'http://89starts.com',
+        };
+        $tt->process( 'page.tt', $vars, $outfile, { binmode => ':encoding(UTF-8)' } )
+            || die sprintf( "file: %s\nerror: %s\n", $outfile, $tt->error );
     }
 }

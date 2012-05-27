@@ -8,7 +8,7 @@ PWD=$(shell pwd)
 BUILD=$(PWD)/build
 SOURCE=$(PWD)/s
 
-default: crank
+default: local
 
 clean:
 	rm -fr $(BUILD)

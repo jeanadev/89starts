@@ -10,6 +10,7 @@ use File::Slurp;
 use Text::Markdown ();
 use Template ();
 use Template::Constants qw( :debug :chomp );
+use File::Basename;
 
 my $sourcepath = 's';
 my $buildpath  = 'build';
@@ -22,10 +23,6 @@ GetOptions(
 ) or exit;
 
 -d $buildpath && -w $buildpath or die;
-
-my $pages = [
-    index => 'Home',
-];
 
 MAIN: {
     my $m = Text::Markdown->new;
@@ -46,20 +43,26 @@ MAIN: {
         rfc_1766_lang => 'en',
     );
 
-    my @pages = @{$pages};
-    while ( @pages ) {
-        my ($name,$desc) = splice( @pages, 0, 2 );
+    my @allpages;
+    my @mdfiles = glob( "$sourcepath/*.md" );
+    for my $mdfile ( @mdfiles ) {
+        my $outfile = basename( $mdfile );
+        $outfile =~ s/\.md$/.html/ or die;
 
-        my $source = read_file( "$sourcepath/$name.md" );
-        my $outfile = "$name.html";
+        my @source = read_file( $mdfile );
+        my $desc = $source[0];
+        $desc =~ s/^# // or die "$mdfile doesn't start with a # heading";
+
+        push( @allpages, { desc => $desc, outfile => $outfile } );
 
         # Convert Markdown to HTML and then process it in the template.
         my $vars = {
             %default_vars,
-            body  => $m->markdown( $source ),
-            title => $name,
+            body  => $m->markdown( join( '', @source ) ),
+            title => $desc,
             base  => $local ? $buildpath : 'http://89starts.com',
         };
+        print "$mdfile -> $outfile\n";
         $tt->process( 'page.tt', $vars, $outfile, { binmode => ':encoding(UTF-8)' } )
             || die sprintf( "file: %s\nerror: %s\n", $outfile, $tt->error );
     }

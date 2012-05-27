@@ -53,7 +53,10 @@ MAIN: {
         my $desc = $source[0];
         $desc =~ s/^# // or die "$mdfile doesn't start with a # heading";
 
-        push( @allpages, { desc => $desc, outfile => $outfile } );
+        push( @allpages, {
+                desc => $desc,
+                outfile => $outfile,
+            } );
 
         # Convert Markdown to HTML and then process it in the template.
         my $vars = {
@@ -66,4 +69,26 @@ MAIN: {
         $tt->process( 'page.tt', $vars, $outfile, { binmode => ':encoding(UTF-8)' } )
             || die sprintf( "file: %s\nerror: %s\n", $outfile, $tt->error );
     }
+
+    my $md_content = build_list_from_allpages( @allpages );
+    my $vars = {
+        %default_vars,
+        body  => $m->markdown( $md_content ),
+        title => 'All pages',
+        base  => $local ? $buildpath : 'http://89starts.com',
+    };
+    my $outfile = 'all-pages.html';
+    $tt->process( 'page.tt', $vars, $outfile, { binmode => ':encoding(UTF-8)' } )
+        || die sprintf( "file: %s\nerror: %s\n", $outfile, $tt->error );
+}
+
+sub build_list_from_allpages {
+    my @pages = @_;
+
+    my @bullets;
+    for my $page ( @pages ) {
+        push( @bullets, sprintf( '* [%s](%s)', $page->{desc}, $page->{outfile} ) );
+    }
+
+    return join( "\n", @bullets );
 }

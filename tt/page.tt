@@ -14,6 +14,12 @@
 
         <div id="content">
             [% body %]
+          
+          
+            <a href="http://github.com/petdance/89starts"><img
+              src="http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"
+              height="149" width="149"
+              /></a>
         </div>
         <div style="clear:both;"></div>
         [% PROCESS footer.tt %]

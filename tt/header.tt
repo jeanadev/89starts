@@ -1,5 +1,23 @@
-<div id="container">
+<div class="header-top"></div>
+
+<div id="banner-width">
     <div id="banner">
-        <h1><a href="[% base %]/">89 Starts -- A guide to getting started in open source</a></h1>
+
+        <div id="logo">
+            <h1>89 Starts</h1>
+            <h2>A guide to getting started in open source</h2>
+        </div>
+
+        <div id="nav">
+            <ul>
+                <li>list</li>
+                <li>help</li>
+                <li>start</li>
+                <li>search</li>
+            </ul>
+        </div>
     </div>
+    <br />
+    <br />
+    <br />
 </div>

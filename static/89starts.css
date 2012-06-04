@@ -1,21 +1,22 @@
 body {
     margin: 0;
     padding: 0;
-    background:#ffffff;
+    background:#faffed;
     font-family: georgia, 'times new roman', serif;
 }
 
 /* basic site styling */
 
 .header-top {
-    height:20px;
+    height:10px;
     width:100%;
     background-color:#000000;
 }
 
 #banner-width {
     width:100%;
-    background:#9cf22b;
+    border-bottom:1px solid #c9e28c;
+    background:#dcf2a9;
     clear:both;
     zoom:1;
     overflow:auto;
@@ -32,7 +33,7 @@ body {
     padding: 0;
     color:#000000;
     font-weight:800;
-    font-size:30px;
+    font-size:22px;
     font-family:'Open Sans', verdana, sans-serif;
 }
 
@@ -67,28 +68,30 @@ body {
 #nav ul li {
   float:left;  
   border-left:1px solid #fff;
+  border-right:1px solid #c9e28c;
   list-style-type:none;
   display:inline;
   min-width:100px;
-  height:100%;
   text-align:center;
   font-family:'Open Sans', verdana, sans-serif;
   font-weight:700;
-  padding:40px 0;
+  padding:15px 0;
   margin:0;
 }
 
+#nav ul li:first-child {
+  border-left:none;
+}
 
 #nav ul li:last-child {
-    border-right:1px solid #fff;
-    }
-
+  border-right:none;  
+  }
     /* containers */
 
 
 
     #content{
-        background: #FFF;
+        background:#faffed;
 }
 
 div#content > a > img { /* github banderole */
@@ -106,6 +109,7 @@ div#content > a > img { /* github banderole */
     padding-top: 1em;
     margin: 0 auto;
     width:80%;
+    font-family: "Merriweather", verana, sans-serif;
 }
 
 #content img {
@@ -113,7 +117,43 @@ div#content > a > img { /* github banderole */
 }
 
 #content h1 {
-    font-weight:bold;
+  font-weight:700;
+  font-size:1.5em;
+  font-family:"Merriweather", verdana, sans-serif;
+}
+
+#content strong {
+  font-weight:900;
+}
+
+#intro h1 {
+  text-align:center;
+color:#8f7d70;
+font-size:2em;
+text-shadow:0 1px 0 rgba(255,255,255,0.7);
+margin:15px auto;
+width: 60%; 
+text-align: center;
+padding: 1em 0;
+}
+
+.col {
+  -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+      border-radius:10px;
+  width:28%;
+  padding:0 15px;
+float:left;
+margin:0 10px;
+background-color:#edf2e1;
+box-shadow:1px 1px 2px rgba(0, 0, 0, 0.25) inset, 2px 2px 2px rgba(255, 255, 255, 1)
+}
+.col:last-child {
+  clear:right;
+}
+
+.colcont {
+  clear:right;
 }
 
 code {

@@ -4,8 +4,7 @@
     <div id="banner">
 
         <div id="logo">
-            <h1>89 Starts</h1>
-            <h2>A guide to getting started in open source</h2>
+            <h1>89 Starts: <span style="font-size:.8em;font-weight:200;">A guide to getting started in open source</h1>
         </div>
 
         <div id="nav">

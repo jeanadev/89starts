@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 
-eval 'use Carp::Always'; # Not everyone has it
-
 use Getopt::Long;
 use File::Slurp;
 use Text::Markdown ();
@@ -25,7 +23,7 @@ GetOptions(
 -d $buildpath && -w $buildpath or die;
 
 MAIN: {
-    my $m = Text::Markdown->new;
+    my $markdown = Text::Markdown->new;
 
     my %tt_defaults = (
         INCLUDE_PATH => [ qw( tt ) ],
@@ -44,14 +42,24 @@ MAIN: {
     );
 
     my @allpages;
-    my @mdfiles = glob( "$sourcepath/*.md" );
-    for my $mdfile ( @mdfiles ) {
-        my $outfile = basename( $mdfile );
-        $outfile =~ s/\.md$/.html/ or die;
-
-        my @source = read_file( $mdfile );
+    my @sourcefiles = glob( "$sourcepath/*.{md,html}" );
+    check_for_dupe_sources( @sourcefiles );
+    for my $sourcefile ( @sourcefiles ) {
+        my @source = read_file( $sourcefile );
         my $desc = $source[0];
-        $desc =~ s/^# // or die "$mdfile doesn't start with a # heading";
+        my $html;
+
+        my $outfile = basename( $sourcefile );
+        if ( $outfile =~ s/\.md$/.html/ ) {
+            $desc = $source[0];
+            $desc =~ s/^# // or die "$sourcefile doesn't start with a # heading";
+            $html = $markdown->markdown( join( '', @source ) ),
+        }
+        else {
+            $source[0] =~ /<!-- (.+) -->/ or die "Can't find a description comment on the first line of $sourcefile";
+            $desc = $1;
+            $html = join( '', @source );
+        }
 
         push( @allpages, {
                 desc => $desc,
@@ -61,11 +69,11 @@ MAIN: {
         # Convert Markdown to HTML and then process it in the template.
         my $vars = {
             %default_vars,
-            body  => $m->markdown( join( '', @source ) ),
+            body  => $html,
             title => $desc,
             base  => $local ? $buildpath : 'http://89starts.com',
         };
-        print "$mdfile -> $outfile\n";
+        print "$sourcefile -> $outfile\n";
         $tt->process( 'page.tt', $vars, $outfile, { binmode => ':encoding(UTF-8)' } )
             || die sprintf( "file: %s\nerror: %s\n", $outfile, $tt->error );
     }
@@ -73,7 +81,7 @@ MAIN: {
     my $md_content = build_list_from_allpages( @allpages );
     my $vars = {
         %default_vars,
-        body  => $m->markdown( $md_content ),
+        body  => $markdown->markdown( $md_content ),
         title => 'All pages',
         base  => $local ? $buildpath : 'http://89starts.com',
     };
@@ -91,4 +99,22 @@ sub build_list_from_allpages {
     }
 
     return join( "\n", @bullets );
+}
+
+sub check_for_dupe_sources {
+    my @files = @_;
+
+    my $has_dupes;
+    my %dupes;
+    for my $file ( @files ) {
+        $file = basename( $file );
+        $file =~ /^([a-z0-9-]+)\.(\w+)$/ or die "This filename doesn't look right to me: $file\n";
+        my ($base,$ext) = ($1,$2);
+        if ( $dupes{$base} ) {
+            die "$file conflicts with $dupes{$base}";
+        }
+        $dupes{$base} = $file;
+    }
+
+    return;
 }

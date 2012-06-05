@@ -1,8 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    background:#faffed;
-    font-family: georgia, 'times new roman', serif;
+    background:#000000;
+    font-family: "Merriweather", georgia, 'times new roman', serif;
 }
 
 /* basic site styling */
@@ -54,6 +54,16 @@ body {
   margin:0;
   }
 
+
+#logo h1 a {
+  color:#000000;
+  text-decoration:none;
+}
+
+#logo h1 a:hover {
+  color:#5a6032;
+text-shadow: 0px 1px 1px #fff
+}
 #nav {
   width:50%;
   padding:0;
@@ -94,10 +104,17 @@ div#content > a > img { /* github banderole */
 
 
 /* main content area */
+#content-width {
+  background:#faffed;
+  width:100%;
+  clear:both;
+}
+
 #content {
     background:#faffed;
     padding-top: 1em;
-    margin: 0 auto 20px;
+    padding-bottom:50px;
+    margin: 0 auto;
     width:80%;
     font-family: "Merriweather", georgia, serif;
 }
@@ -194,19 +211,6 @@ pre code {
 #footer a {
     color:#9cf22b;
     }
-
-
-.button {
-  -moz-border-radius:10px;                                                                                                                  
-  -webkit-border-radius:10px;
-  border-radius:10px;
-  display:block;
-  padding:10px;
-  text-align:center;
-  background-color:#7d7f76;
-  color:#ffffff;
-  margin:10px 0 15px 0;
-}
 
 
 

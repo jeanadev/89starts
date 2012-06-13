@@ -91,14 +91,17 @@ MAIN: {
 }
 
 sub build_list_from_allpages {
+
     my @pages = @_;
 
     my @bullets;
+  
     for my $page ( @pages ) {
         push( @bullets, sprintf( '* [%s](%s)', $page->{desc}, $page->{outfile} ) );
-    }
+      }
 
     return join( "\n", @bullets );
+
 }
 
 sub check_for_dupe_sources {
